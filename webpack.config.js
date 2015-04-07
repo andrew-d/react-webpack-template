@@ -19,13 +19,6 @@ var IS_PRODUCTION = ('production' === process.env.NODE_ENV);
 // ----------------------------------------------------------------------
 // Computed configuration (paths, etc.)
 
-var sassOptions = [
-  'precision=10',
-  'outputStyle=expanded',
-  'sourceMap=' + !IS_PRODUCTION,
-  'includePaths[]=' + path.resolve(__dirname, './bower_components/bootstrap-sass-official/assets/stylesheets'),
-].join('&');
-
 var devServerHost = options.devServerAddr + ':' + options.devServerPort;
 
 // ----------------------------------------------------------------------
@@ -88,7 +81,6 @@ var cssLoaders = [
 ];
 var styleModLoaders = [
     { test: /\.css$/, loader: cssLoaders },
-    { test: /\.scss$/, loader: cssLoaders.concat(["sass-loader?" + sassOptions]) },
 ];
 
 // If we're in production, we extend the style loaders to also extract text.
@@ -191,6 +183,7 @@ var config = {
   },
 
   resolve: {
+    modulesDirectories: ['bower_components', 'node_modules'],
     extensions: ['', '.js', '.jsx', '.json'],
   },
 

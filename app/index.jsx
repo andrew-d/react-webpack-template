@@ -6,8 +6,8 @@ var Marty = require('marty'),
     Router = require('react-router'),
     routes = require('./Routes');
 
-// Require the global stylesheet.
-require('./styles/index.scss');
+// Require vendor styles here.
+require('bootstrap/dist/css/bootstrap.css');
 
 if( process.env.NODE_ENV !== 'production' ) {
   // Dev tool support
