@@ -13,7 +13,7 @@
   "author": "Andrew Dunham <andrew@du.nham.ca>",
   "license": "MIT",
   "dependencies": {
-    "babel": "^5.0.0",
+    "babel": "^5.0.10",
     "immutable": "^3.6.2",
     "isomorphic-fetch": "^2.0.1",
     "lodash-node": "^3.3.0",
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "autoprefixer-loader": "^1.1.0",
-    "babel-core": "^5.0.9",
+    "babel-core": "^5.0.10",
     "babel-eslint": "^2.0.2",
     "babel-loader": "^5.0.0",
     "css-loader": "^0.9.1",
@@ -48,7 +48,7 @@
     "karma-mocha-reporter": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.4",
     "karma-webpack": "^1.5.0",
-    "mocha": "^2.2.1",
+    "mocha": "^2.2.3",
     "morgan": "^1.5.1",
     "nomnom": "^1.8.1",
     "react-hot-loader": "^1.1.4",
