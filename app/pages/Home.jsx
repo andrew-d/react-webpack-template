@@ -1,8 +1,8 @@
-var React = require('react');
+import React from 'react';
 
 
 var Home = React.createClass({
-  render: function() {
+  render() {
     return (
       <div>
         <h1>React Webpack Starter</h1>

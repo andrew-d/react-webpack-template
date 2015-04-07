@@ -1,8 +1,8 @@
-var React = require('react');
-
+import InlineCss from 'react-inline-css';
+import React from 'react';
 
 var About = React.createClass({
-  render: function() {
+  render() {
     return (
       <div>
         <p>This is the about page.</p>

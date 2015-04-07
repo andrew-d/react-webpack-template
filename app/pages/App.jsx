@@ -1,15 +1,11 @@
-var React = require('react'),
-    RouteHandler = require('react-router').RouteHandler,
-    ReactBootstrap = require('react-bootstrap'),
-    ReactRouterBootstrap = require('react-router-bootstrap');
-
-var NavItemLink = ReactRouterBootstrap.NavItemLink,
-    Nav = ReactBootstrap.Nav,
-    Navbar = ReactBootstrap.Navbar;
+import React from 'react';
+import { RouteHandler } from 'react-router';
+import { Nav, Navbar } from 'react-bootstrap';
+import { NavItemLink } from 'react-router-bootstrap';
 
 
 var App = React.createClass({
-  render: function() {
+  render() {
     return (
       <div className='page-wrapper'>
         <Navbar fluid={true} staticTop={true} brand='Template'>

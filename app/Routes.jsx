@@ -1,12 +1,10 @@
-var React = require('react'),
-    Router = require('react-router');
-
-var { Route, DefaultRoute } = Router;
+import React from 'react';
+import { Route, DefaultRoute } from 'react-router';
 
 // Require routes
-var About = require('./pages/About'),
-    App = require('./pages/App'),
-    Home = require('./pages/Home');
+import About from './pages/About';
+import App from './pages/App';
+import Home from './pages/Home';
 
 
 var Routes = (

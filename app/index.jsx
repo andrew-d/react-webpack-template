@@ -1,13 +1,14 @@
 // This must come first
-require('babel/polyfill');
+import 'babel/polyfill';
 
-var Marty = require('marty'),
-    React = require('react'),
-    Router = require('react-router'),
-    routes = require('./Routes');
+import Marty from 'marty';
+import React from 'react';
+import Router from 'react-router';
 
-// Require vendor styles here.
-require('bootstrap/dist/css/bootstrap.css');
+import routes from './Routes';
+
+// Import vendor styles here.
+import 'bootstrap/dist/css/bootstrap.css';
 
 if( process.env.NODE_ENV !== 'production' ) {
   // Dev tool support
