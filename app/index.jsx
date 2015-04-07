@@ -1,3 +1,6 @@
+// This must come first
+require('babel/polyfill');
+
 var Marty = require('marty'),
     React = require('react'),
     Router = require('react-router'),
