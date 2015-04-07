@@ -3,17 +3,15 @@ import React from 'react';
 
 var About = React.createClass({
   statics: {
-    css() {
-      return `
-        & {
-          font-family: monospace;
-        }
+    css: () => `
+      & {
+        font-family: monospace;
+      }
 
-        & p {
-          color: blue;
-        }
-      `;
-    },
+      & p {
+        color: blue;
+      }
+    `,
   },
 
   render() {
