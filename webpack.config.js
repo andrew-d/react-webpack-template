@@ -176,52 +176,6 @@ if( !IS_PRODUCTION ) {
   );
 }
 
-// Configuration for JSHint. Much of this taken from:
-//    https://gist.github.com/connor/1597131
-var jsHintOptions = {
-  // Environment
-  "esnext"        : true,   // We're using ES6 syntax
-  "browser"       : true,   // We're in the browser
-  "browserify"    : true,   // Browserify-style globals are allowed
-  "debug"         : false,  // Disallow debugger statements - e.g. browser breakpoints
-  "devel"         : true,   // Allow development statements - e.g. `console.log()`
-
-  // Preventing errors
-  "asi"           : false,  // Do not allow automatic semicolon insertion.
-  "bitwise"       : true,   // Prohibit bitwise operators (&, |, ^, etc.).
-  "boss"          : false,  // Tolerate assignments inside if, for & while.
-                            // Usually conditions & loops are for comparison, not assignments.
-  "curly"         : true,   // Require {} for every new block or scope.
-  "eqeqeq"        : true,   // Require triple equals i.e. `===`.
-  "eqnull"        : false,  // Tolerate use of `== null`.
-  "evil"          : false,  // Tolerate use of `eval`.
-  "expr"          : false,  // Tolerate `ExpressionStatement` as programs.
-  "forin"         : false,  // Tolerate `for in` loops without `hasOwnPrototype`.
-  "loopfunc"      : false,  // Allow functions to be defined within loops.
-  "noarg"         : true,   // Prohibit use of `arguments.caller` and `arguments.callee`.
-  "regexp"        : true,   // Prohibit `.` and `[^...]` in regular expressions.
-  "supernew"      : false,  // Tolerate `new function () { ... };` and `new Object;`.
-  "undef"         : true,   // Require all non-global variables be declared
-                            // before they are used.
-  "unused"        : true,   // Prevent defined and unused variables.
-
-  // Styling preferences
-  "newcap"        : true,   // Require capitalization of all constructor
-                            // functions - e.g. `new F()`.
-  "noempty"       : true,   // Prohibit use of empty blocks.
-  "trailing"      : true,   // Prohibit trailing whitespaces.
-  "indent"        : 2,      // Specify indentation spacing
-  "strict"        : false,  // Require all functions to run in ES5's strict mode.
-  "sub"           : true,   // Warn about using `[]` notation instead of using
-                            // dot notation - but only where possible.
-};
-
-// Only enable some things if we're not in prod.
-if( !IS_PRODUCTION ) {
-  jsHintOptions.debug = true;   // Permit debugger statements - e.g. browser breakpoints
-}
-
-
 var config = {
   target: 'web',
   devtool: IS_PRODUCTION ? null : 'eval',
@@ -244,17 +198,17 @@ var config = {
   plugins: plugins,
   module: {
     preLoaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/,
-        loaders: ['jshint-loader', 'babel-loader'] },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loaders: ['eslint-loader'],
+      },
     ],
 
     loaders: [].concat(scriptModLoaders)
                .concat(styleModLoaders)
                .concat(staticModLoaders),
   },
-
-  // Options for JSHint
-  jshint: jsHintOptions,
 
   // For use from server.js
   userOptions: options,
