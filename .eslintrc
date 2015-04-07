@@ -23,11 +23,14 @@
     "semi": [2, "always"],
 
     // React rules
+    "react/jsx-boolean-value": "always",
+    "react/jsx-quotes": [2, "single", "avoid-escape"],
     "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "react/no-did-mount-set-state": 1,
     "react/no-did-update-set-state": 1,
     "react/no-unknown-property": 1,
+    "react/prop-types": 2,
     "react/wrap-multilines": 1
   },
   ecmaFeatures: {

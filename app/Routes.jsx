@@ -9,12 +9,12 @@ var About = require('./pages/About'),
 
 
 var Routes = (
-  <Route handler={App} path="/">
+  <Route handler={App} path='/'>
     {/* Introduction page */}
-    <DefaultRoute name="index" handler={Home} />
+    <DefaultRoute name='index' handler={Home} />
 
     {/* About page */}
-    <Route name="about" handler={About} />
+    <Route name='about' handler={About} />
   </Route>
 );
 
