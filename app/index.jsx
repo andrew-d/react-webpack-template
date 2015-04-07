@@ -1,5 +1,6 @@
-// This must come first
+// This must come first, in this order
 import 'babel/polyfill';
+import 'isomorphic-fetch';
 
 import Marty from 'marty';
 import React from 'react';
