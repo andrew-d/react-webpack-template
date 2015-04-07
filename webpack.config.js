@@ -116,22 +116,22 @@ var fileLoaderOptions = { name: 'assets/[hash].[ext]' },
 var staticModLoaders = [
   // Various font types from Bootstrap
   {
-      test: /\.(woff|woff2)$/,
+      test: /\.(woff|woff2)(\?.*)?$/,
       loader: "url-loader",
       query: extend({}, urlLoaderOptions, { mimetype: 'application/font-woff' }),
   },
   {
-    test: /\.ttf$/,
+    test: /\.ttf(\?.*)?$/,
     loader: "file-loader",
     query: extend({}, fileLoaderOptions, { mimetype: 'application/vnd.ms-fontobject' }),
   },
   {
-    test: /\.eot$/,
+    test: /\.eot(\?.*)?$/,
     loader: "file-loader",
     query: extend({}, fileLoaderOptions, { mimetype: 'application/x-font-ttf' }),
   },
   {
-    test: /\.svg$/,
+    test: /\.svg(\?.*)?$/,
     loader: "file-loader",
     query: extend({}, fileLoaderOptions, { mimetype: 'image/svg+xml' }),
   },
