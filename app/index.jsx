@@ -6,10 +6,10 @@ var Marty = require('marty'),
 // Require the global stylesheet.
 require('./styles/index.scss');
 
-if( process.env.NODE_ENV !== "production" ) {
-    // Dev tool support
-    window.React = React;
-    window.Marty = Marty;
+if( process.env.NODE_ENV !== 'production' ) {
+  // Dev tool support
+  window.React = React;
+  window.Marty = Marty;
 }
 
 Router.run(routes, Router.HistoryLocation, function(Handler) {

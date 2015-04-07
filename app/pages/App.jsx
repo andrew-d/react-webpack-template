@@ -1,12 +1,11 @@
 var React = require('react'),
-    RouteHandler = require('react-router').RouteHandler;
+    RouteHandler = require('react-router').RouteHandler,
+    ReactBootstrap = require('react-bootstrap'),
+    ReactRouterBootstrap = require('react-router-bootstrap');
 
-var ReactBootstrap = require('react-bootstrap'),
+var NavItemLink = ReactRouterBootstrap.NavItemLink,
     Nav = ReactBootstrap.Nav,
     Navbar = ReactBootstrap.Navbar;
-
-var ReactRouterBootstrap = require('react-router-bootstrap'),
-    NavItemLink = ReactRouterBootstrap.NavItemLink;
 
 
 var App = React.createClass({
