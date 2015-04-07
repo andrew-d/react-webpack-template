@@ -68,7 +68,7 @@ if( IS_PRODUCTION ) {
 // Javascript loaders
 var jsLoaders       = ['react-hot', 'babel-loader'],
     es6Dependencies = ['marty'],
-    ignoreRegexp    = 'node_modules(?!/(' + es6Dependencies.join('|') + '))';
+    ignoreRegexp    = new RegExp('node_modules(?!/(' + es6Dependencies.join('|') + '))');
 var scriptModLoaders = [
     { test: /\.js$/,   loaders: jsLoaders, exclude: ignoreRegexp },
     { test: /\.jsx$/,  loaders: jsLoaders, exclude: ignoreRegexp },
