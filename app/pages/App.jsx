@@ -4,7 +4,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { NavItemLink } from 'react-router-bootstrap';
 
 
-var App = React.createClass({
+class App extends React.Component {
   render() {
     return (
       <div className='page-wrapper'>
@@ -24,8 +24,8 @@ var App = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 
 module.exports = App;
