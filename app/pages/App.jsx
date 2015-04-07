@@ -24,7 +24,7 @@ var App = React.createClass({
           </Nav>
         </Navbar>
 
-        <div className='content-container'>
+        <div className='container-fluid'>
           <RouteHandler />
         </div>
       </div>

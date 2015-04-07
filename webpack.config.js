@@ -66,10 +66,12 @@ if( IS_PRODUCTION ) {
 }
 
 // Javascript loaders
-var jsLoaders = ['react-hot', 'jsx?harmony'];
+var jsLoaders       = ['react-hot', 'babel-loader'],
+    es6Dependencies = ['marty'],
+    ignoreRegexp    = 'node_modules(?!/(' + es6Dependencies.join('|') + '))';
 var scriptModLoaders = [
-    { test: /\.js$/,   loaders: jsLoaders, exclude: /node_modules/ },
-    { test: /\.jsx$/,  loaders: jsLoaders, exclude: /node_modules/ },
+    { test: /\.js$/,   loaders: jsLoaders, exclude: ignoreRegexp },
+    { test: /\.jsx$/,  loaders: jsLoaders, exclude: ignoreRegexp },
     { test: /\.json$/, loaders: ['json'] },
 ];
 
@@ -243,7 +245,7 @@ var config = {
   module: {
     preLoaders: [
       { test: /\.jsx?$/, exclude: /node_modules/,
-        loader: 'jsxhint-loader?harmony' },
+        loaders: ['jshint-loader', 'babel-loader'] },
     ],
 
     loaders: [].concat(scriptModLoaders)
