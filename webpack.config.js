@@ -19,6 +19,19 @@ var IS_PRODUCTION = ('production' === process.env.NODE_ENV);
 // ----------------------------------------------------------------------
 // Computed configuration (paths, etc.)
 
+var babelLoaderOptions = [
+  'optional[]=es7.classProperties',                         // static foo = 'bar' in classes
+
+  // TODO: this breaks some things
+  //'optional[]=optimisation.react.constantElements',         // move JSX out of function bodies
+];
+if( IS_PRODUCTION ) {
+  babelLoaderOptions.push(
+    'optional[]=optimisation.react.inlineElements'
+  );
+}
+var BABEL_LOADER = 'babel-loader?' + babelLoaderOptions.join('&');
+
 var devServerHost = options.devServerAddr + ':' + options.devServerPort;
 
 // ----------------------------------------------------------------------
@@ -59,7 +72,7 @@ if( IS_PRODUCTION ) {
 }
 
 // Javascript loaders
-var jsLoaders       = ['react-hot', 'babel-loader'],
+var jsLoaders       = ['react-hot', BABEL_LOADER],
     es6Dependencies = ['marty'],
     ignoreRegexp    = new RegExp('node_modules(?!/(' + es6Dependencies.join('|') + '))');
 var scriptModLoaders = [

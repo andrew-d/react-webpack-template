@@ -4,6 +4,17 @@ import React from 'react';
 
 
 class About extends React.Component {
+  // Inline styles for this class.
+  static css = () => `
+    & {
+      font-family: monospace;
+    }
+
+    & p {
+      color: blue;
+    }
+  `;
+
   render() {
     return (
       <InlineCss stylesheet={About.css()}>
@@ -16,17 +27,6 @@ class About extends React.Component {
     );
   }
 }
-
-// Inline styles for the above class.
-About.css = () => `
-  & {
-    font-family: monospace;
-  }
-
-  & p {
-    color: blue;
-  }
-`;
 
 
 module.exports = About;
