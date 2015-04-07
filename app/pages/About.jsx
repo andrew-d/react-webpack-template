@@ -2,11 +2,25 @@ import InlineCss from 'react-inline-css';
 import React from 'react';
 
 var About = React.createClass({
+  statics: {
+    css() {
+      return `
+        & {
+          font-family: monospace;
+        }
+
+        & p {
+          color: blue;
+        }
+      `;
+    },
+  },
+
   render() {
     return (
-      <div>
-        <p>This is the about page.</p>
-      </div>
+      <InlineCss stylesheet={About.css()}>
+        <p>This is the about page, demonstrating an inline style.</p>
+      </InlineCss>
     );
   },
 });
