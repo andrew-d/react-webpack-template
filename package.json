@@ -8,7 +8,8 @@
     "build-prod": "NODE_ENV=production node_modules/.bin/webpack --progress --colors",
     "build": "node_modules/.bin/webpack --progress --colors",
     "watch": "node_modules/.bin/webpack --watch --progress --colors",
-    "test": "eslint app/ && karma start"
+    "test": "eslint app/ && karma start",
+    "server": "npm run build && node ./debug-server.js"
   },
   "author": "Andrew Dunham <andrew@du.nham.ca>",
   "license": "MIT",
