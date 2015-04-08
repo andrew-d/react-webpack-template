@@ -1,4 +1,7 @@
 // This must come first, in this order
+import 'ie8';
+import 'html5shiv/dist/html5shiv';
+import 'html5shiv/dist/html5shiv-printshiv';
 import 'babel/polyfill';
 
 import Marty from 'marty';
