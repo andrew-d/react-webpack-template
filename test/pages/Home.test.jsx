@@ -7,8 +7,9 @@ import stubRouterContext from '../utils/stubRouterContext';
 
 describe('home', function () {
   it('renders without problems', function () {
-    var Subject = stubRouterContext(Home);
-    var home = TestUtils.renderIntoDocument(<Subject />);
+    const Subject = stubRouterContext(Home);
+    const home = TestUtils.renderIntoDocument(<Subject />);
+
     expect(home).toExist();
   });
 });

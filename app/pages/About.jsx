@@ -3,7 +3,7 @@ import InlineCss from 'react-inline-css';
 import React from 'react';
 
 
-class About extends React.Component {
+export default class About extends React.Component {
   // Inline styles for this class.
   static css = () => `
     & {
@@ -27,6 +27,3 @@ class About extends React.Component {
     );
   }
 }
-
-
-module.exports = About;

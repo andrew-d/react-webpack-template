@@ -6,7 +6,7 @@ import { assign } from 'lodash-node';
 //    https://github.com/rackt/react-router/blob/master/docs/guides/testing.md
 
 
-var stubRouterContext = (Component, props, stubs) => {
+const stubRouterContext = (Component, props, stubs) => {
   function RouterStub() { }
 
   assign(RouterStub, {

@@ -7,7 +7,7 @@ import App from './pages/App';
 import Home from './pages/Home';
 
 
-var Routes = (
+const Routes = (
   <Route handler={App} path='/'>
     {/* Introduction page */}
     <DefaultRoute name='index' handler={Home} />
@@ -18,4 +18,4 @@ var Routes = (
 );
 
 
-module.exports = Routes;
+export default Routes;
