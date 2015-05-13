@@ -1,12 +1,14 @@
+import Home from '../../app/pages/Home';
 import React from 'react';
 import TestUtils from 'react/lib/ReactTestUtils';
 import expect from 'expect';
-import Home from './Home';
+import stubRouterContext from '../utils/stubRouterContext';
 
 
 describe('home', function () {
   it('renders without problems', function () {
-    var home = TestUtils.renderIntoDocument(<Home />);
+    var Subject = stubRouterContext(Home);
+    var home = TestUtils.renderIntoDocument(<Subject />);
     expect(home).toExist();
   });
 });

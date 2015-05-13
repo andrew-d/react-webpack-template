@@ -28,6 +28,10 @@ var devServerHost = 'http://' +
                     config.userOptions.devServerPort;
 
 var opts = nomnom
+  .option('host', {
+    abbr: 'h',
+    default: process.env.DEBUG_HOST || 'localhost',
+  })
   .option('port', {
     abbr: 'p',
     default: 3001,
@@ -55,12 +59,16 @@ var opts = nomnom
   .parse();
 
 
+var assetsPath = '/assets';
+
+
 // ----------------------------------------------------------------------
 // Set up proxy
 var app = express();
 
 var devServerProxy = httpProxy.createProxyServer({
-  target: devServerHost + '/assets',
+  target: devServerHost,
+  ws: true,
 });
 
 devServerProxy.on('error', function(e) {
@@ -69,7 +77,14 @@ devServerProxy.on('error', function(e) {
 });
 
 // Proxy request for static assets to the webpack dev server.
-app.use('/assets', function(req, res, next) {
+app.all(assetsPath + '/*', function(req, res, next) {
+  console.log('Proxying to devserver: ' + req.url);
+  return devServerProxy.web(req, res);
+});
+
+// Proxy Socket.IO assets too.
+app.all('/socket.io/*', function(req, res, next) {
+  console.log('Proxying socket.io to devserver: ' + req.url);
   return devServerProxy.web(req, res);
 });
 
@@ -98,6 +113,7 @@ if( opts.upstream ) {
 
 // Send the index page for all remaining requests.
 app.get('/*', function(req, res) {
+  console.log('Defaulting to sending index page for: ' + req.url);
   res.sendFile(__dirname + '/build/index.html');
 });
 

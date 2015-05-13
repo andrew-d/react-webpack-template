@@ -1,3 +1,14 @@
-node_modules
-bower_components
+.DS_Store
+
+# compiled output
+/build
+/tmp
+/coverage
+
+# dependencies
+/node_modules
+/bower_components
+
+# misc
+/.sass-cache
 npm-debug.log

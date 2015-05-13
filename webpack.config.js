@@ -93,7 +93,8 @@ var cssLoaders = [
   'autoprefixer-loader?browsers=last 3 versions'
 ];
 var styleModLoaders = [
-    { test: /\.css$/, loader: cssLoaders },
+  { test: /\.css$/, loader: cssLoaders },
+  { test: /\.scss$/, loader: cssLoaders.concat('sass') },
 ];
 
 // If we're in production, we extend the style loaders to also extract text.
@@ -183,13 +184,13 @@ if( !IS_PRODUCTION ) {
 
 var config = {
   target: 'web',
-  devtool: IS_PRODUCTION ? null : 'eval',
+  devtool: IS_PRODUCTION ? null : 'source-map',
 
   entry: entries,
 
   output: {
     path:       __dirname + '/build/',
-    publicPath: 'http://' + devServerHost + '/',
+    publicPath: '/',
 
     // Cache busting in production
     filename:   'assets/' + (IS_PRODUCTION ? 'bundle-[hash].js' : 'bundle.js'),
