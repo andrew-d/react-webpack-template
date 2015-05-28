@@ -50,8 +50,8 @@ module.exports = function(config) {
         // This injects the instrumentation for the Istanbul code coverage tool
         postLoaders: [{
           test: /\.jsx$/,
-          exclude: /((node_modules|bower_components)\/)|-test\.jsx?$/,
-          loader: 'istanbul-instrumenter'
+          exclude: /((node_modules|bower_components)\/)|\.test\.jsx?$/,
+          loader: 'isparta-instrumenter-loader'
         }],
       },
       plugins: [
