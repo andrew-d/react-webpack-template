@@ -2,8 +2,14 @@
 
 var morgan = require('morgan'),
     nomnom = require('nomnom'),
+    url = require('url'),
     webpack = require('webpack'),
     WebpackDevServer = require('webpack-dev-server');
+
+// Silly helper
+function endsWith(str, suffix) {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
 
 // ----------------------------------------------------------------------
 // Parse command-line options
@@ -74,11 +80,25 @@ var devServerConfig = {
 };
 
 // Configure proxy
+var prefixPath;
 if( opts.upstream ) {
   var logger = morgan('dev');
 
-  // TODO: this is a bit hacky - should properly parse the upstream-prefix
-  devServerConfig.proxy[opts['upstream-prefix'] + '/*'] = {
+  // Parse our upstream prefix using the URL module and ensure it ends with
+  // '/*' so proxying works.
+  var prefixUrl = url.parse(opts['upstream-prefix']);
+
+  prefixPath = prefixUrl.pathname;
+  if( endsWith(prefixPath, '/*') ) {
+    // Do nothing
+  } else if( endsWith(prefixPath, '/') ) {
+    prefixPath += '*';
+  } else {
+    prefixPath += '/*';
+  }
+
+  // Set up the proxy configuration.
+  devServerConfig.proxy[prefixPath] = {
     target: opts.upstream,
     changeOrigin: true,
     ws: true,
@@ -107,5 +127,9 @@ new WebpackDevServer(webpack(webpackConfig), devServerConfig).listen(
     }
 
     console.log('Listening at ' + opts.host + ':' + opts.port);
+    if( opts.upstream ) {
+      console.log('Proxying requests that match "' + prefixPath + '" to: ' + opts.upstream);
+    }
+
     console.log('--------------------------------------------------');
   });
