@@ -72,12 +72,10 @@ if( IS_PRODUCTION ) {
 }
 
 // Javascript loaders
-var jsLoaders       = ['react-hot', BABEL_LOADER],
-    es6Dependencies = ['marty'],
-    ignoreRegexp    = new RegExp('node_modules(?!/(' + es6Dependencies.join('|') + '))');
+var jsLoaders        = ['react-hot', BABEL_LOADER];
 var scriptModLoaders = [
-    { test: /\.js$/,   loaders: jsLoaders, exclude: ignoreRegexp },
-    { test: /\.jsx$/,  loaders: jsLoaders, exclude: ignoreRegexp },
+    { test: /\.js$/,   loaders: jsLoaders, exclude: /node_modules/ },
+    { test: /\.jsx$/,  loaders: jsLoaders, exclude: /node_modules/ },
     { test: /\.json$/, loaders: ['json'] },
 ];
 
