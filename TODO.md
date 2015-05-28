@@ -1,0 +1,4 @@
+- [ ] Fix `debug-server.js`
+- [ ] Test `react-hot-loader` with new config
+- [ ] Add back a Flux implementation (probably Flummox)
+- [ ] (MAYBE) get "isomorphism" working?
