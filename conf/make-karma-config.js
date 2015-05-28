@@ -52,6 +52,9 @@ module.exports = function(opts) {
   var options = validateOptions(opts),
       testDir = path.join(__dirname, '..', 'test');
 
+  var testFilesJs = path.join(testDir, '**', '*.test.js'),
+      testFilesJsx = path.join(testDir, '**', '*.test.jsx');
+
   var karmaConfig = {
     // TravisCI, etc. can run Firefox in xvfb
     browsers: [options.ci ? 'Firefox' : 'Chrome'],
@@ -59,8 +62,8 @@ module.exports = function(opts) {
     frameworks: ['mocha'],
 
     files: [
-      path.join(testDir, '**', '*.test.js'),
-      path.join(testDir, '**', '*.test.jsx'),
+      testFilesJs,
+      testFilesJsx,
     ],
     preprocessors: {},
 
@@ -81,8 +84,8 @@ module.exports = function(opts) {
   };
 
   // Set preprocessors.
-  karmaConfig.preprocessors[path.join(testDir, '**', '*.test.js')] = ['webpack'];
-  karmaConfig.preprocessors[path.join(testDir, '**', '*.test.jsx')] = ['webpack'];
+  karmaConfig.preprocessors[testFilesJs] = ['webpack'];
+  karmaConfig.preprocessors[testFilesJsx] = ['webpack'];
 
   // Add appropriate browser loaders
   karmaConfig.plugins.push(options.ci ? 'karma-firefox-launcher' : 'karma-chrome-launcher');
@@ -95,18 +98,19 @@ module.exports = function(opts) {
       {
         test: /\.jsx?$/,
         exclude: /(\/test\/|node_modules)/,
-        loader: 'isparta-instrumenter-loader',
+        loader: 'isparta-loader?{babel: {optional:["es7.classProperties"]}}',
       },
     ].concat(webpackConfig.module.preLoaders);
 
     // Set coverage options.
     karmaConfig.coverageReporter = {
       dir: path.join(__dirname, '..', 'coverage'),
+
       reporters: options.ci ? [
-        { type: 'text' },
+        { type: 'text', subdir: '.', file: 'coverage.txt' },
       ] : [
-        { type: 'text' },
-        { type: 'html' },
+        { type: 'text', subdir: '.', file: 'coverage.txt' },
+        { type: 'html', subdir: 'report-html' },
       ],
     };
 
