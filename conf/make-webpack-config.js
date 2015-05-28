@@ -105,7 +105,8 @@ function buildJavascriptConfig(config, opts) {
   // 2. Make the appropriate loaders
   // --------------------------------------------------
   var jsLoaders = [babelLoader];
-  if( opts.production ) {
+  if( opts.hotReload ) {
+    // Must go before other loaders.
     jsLoaders.unshift('react-hot-loader');
   }
 
@@ -142,6 +143,15 @@ function buildJavascriptConfig(config, opts) {
   ];
 
   Array.prototype.push.apply(config.plugins, extraPlugins);
+
+  // 4. Add entry points for react-hot-loader
+  // --------------------------------------------------
+  if( opts.hotReload ) {
+    Array.prototype.unshift.apply(config.entry, [
+      'webpack-dev-server/client?http://' + opts.devServerAddr,
+      'webpack/hot/only-dev-server'
+    ]);
+  }
 }
 
 
@@ -272,7 +282,7 @@ module.exports = function(opts) {
 
   // Default configuration.
   var config = {
-    entry:   path.join(__dirname, '..', 'app', 'index'),
+    entry:   [path.join(__dirname, '..', 'app', 'index')],
     target:  'web',
     debug:   !options.production,
     devtool: options.devtool,
@@ -281,7 +291,7 @@ module.exports = function(opts) {
     // build.
     output: {
       path:       path.join(__dirname, '..', options.production ? 'dist' : 'build'),
-      publicPath: options.production ? '' : 'http://localhost:8080',
+      publicPath: '/',
       filename:   path.join(options.assetsPath , options.production ? 'bundle-[hash].js' : 'bundle.js'),
     },
 

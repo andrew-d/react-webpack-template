@@ -1,36 +1,16 @@
-var express = require('express'),
+#!/usr/bin/env node
+
+var morgan = require('morgan'),
     nomnom = require('nomnom'),
-    httpProxy = require('http-proxy'),
-    morgan = require('morgan'),
-    url = require('url'),
     webpack = require('webpack'),
-    when = require('when'),
     WebpackDevServer = require('webpack-dev-server');
 
-var config = require('./webpack.config');
-
-
-// This little script helps with running webpack-dev-server and proxying
-// requests to a backend API.  It will do the following:
-//
-//  1. Start webpack-dev-server on the address that's specified in
-//     webpack.config.js
-//  2. Start a regular HTTP server on a configurable port that serves the
-//     application's static assets, and redirects all unmatched requests to
-//     the application's index page, to support the HTML5 history API.
-//  3. If configured, proxies requests with a given prefix to a backend URL.
-
-
 // ----------------------------------------------------------------------
-// Config parsing
-var devServerHost = 'http://' +
-                    config.userOptions.devServerAddr + ':' +
-                    config.userOptions.devServerPort;
-
+// Parse command-line options
 var opts = nomnom
   .option('host', {
     abbr: 'h',
-    default: process.env.DEBUG_HOST || 'localhost',
+    default: 'localhost',
   })
   .option('port', {
     abbr: 'p',
@@ -58,71 +38,20 @@ var opts = nomnom
   })
   .parse();
 
-
-var assetsPath = '/assets';
-
-
 // ----------------------------------------------------------------------
-// Set up proxy
-var app = express();
-
-var devServerProxy = httpProxy.createProxyServer({
-  target: devServerHost,
-  ws: true,
+// Build configuration
+var webpackConfig = require('./conf/make-webpack-config.js')({
+  production   : false,
+  hotReload    : true,
+  lint         : false,
+  devServerAddr: opts.host + ':' + opts.port,
 });
 
-devServerProxy.on('error', function(e) {
-  console.log('Error proxying to webpack-dev-server');
-  console.log(e);
-});
-
-// Proxy request for static assets to the webpack dev server.
-app.all(assetsPath + '/*', function(req, res, next) {
-  console.log('Proxying to devserver: ' + req.url);
-  return devServerProxy.web(req, res);
-});
-
-// Proxy Socket.IO assets too.
-app.all('/socket.io/*', function(req, res, next) {
-  console.log('Proxying socket.io to devserver: ' + req.url);
-  return devServerProxy.web(req, res);
-});
-
-if( opts.upstream ) {
-  var upstreamTarget = opts.upstream + opts['upstream-prefix'];
-  var upstreamProxy = httpProxy.createProxyServer({
-    target: upstreamTarget,
-    changeOrigin: true,
-  });
-
-  upstreamProxy.on('error', function(e) {
-    console.log('Error proxying to ' + upstreamTarget);
-    console.log(e);
-  });
-
-  console.log('Proxying to ' + upstreamTarget);
-
-  // Print the status of requests to/from the upstream API.
-  app.use(opts['upstream-prefix'], morgan('dev'));
-
-  // Proxy things in this prefix to the API
-  app.use(opts['upstream-prefix'], function(req, res, next) {
-    return upstreamProxy.web(req, res);
-  });
-}
-
-// Send the index page for all remaining requests.
-app.get('/*', function(req, res) {
-  console.log('Defaulting to sending index page for: ' + req.url);
-  res.sendFile(__dirname + '/build/index.html');
-});
-
-
-// ----------------------------------------------------------------------
-// Set up webpack dev server
-var devServer = new WebpackDevServer(webpack(config), {
-  publicPath: config.output.publicPath,
+var devServerConfig = {
+  publicPath: webpackConfig.output.publicPath,
   hot: true,
+  historyApiFallback: true,
+
   stats: {
     colors: true,
     hash: true,
@@ -134,47 +63,43 @@ var devServer = new WebpackDevServer(webpack(config), {
     modules: false,
     cached: false,
   },
-});
+
+  proxy: {},
+};
+
+// Configure proxy
+if( opts.upstream ) {
+  var logger = morgan('dev');
+
+  // TODO: this is a bit hacky - should properly parse the upstream-prefix
+  devServerConfig.proxy[opts['upstream-prefix'] + '/*'] = {
+    target: opts.upstream,
+    changeOrigin: true,
+    ws: true,
+    configure: function(proxy) {
+      // The configure function is called on every request, so don't add a
+      // listener each time.
+      if( proxy.__has_logger ) return;
+
+      proxy.on('proxyReq', function(proxyReq, req, res, options) {
+        logger(req, res, function() {});
+      });
+
+      proxy.__has_logger = true;
+    },
+  };
+}
+
 
 // ----------------------------------------------------------------------
-// Run both servers
-var p1 = when.promise(function(resolve, reject) {
-  devServer.listen(
-    config.userOptions.devServerPort,
-    config.userOptions.devServerAddr,
-    function (err, result) {
-      if( err ) {
-        console.log('Error starting webpack-dev-server: ' + err);
-        reject(err);
-        return;
-      }
-
-      resolve();
-    });
-});
-
-var p2 = when.promise(function(resolve, reject) {
-  app.listen(opts.port, function(err, result) {
+// Start dev server.
+new WebpackDevServer(webpack(webpackConfig), devServerConfig).listen(
+  opts.port, opts.host,
+  function(err, result) {
     if( err ) {
-      console.log('Error starting server: ' + err);
-      reject(err);
-      return;
+      console.log(err);
     }
 
-    resolve();
+    console.log('Listening at ' + opts.host + ':' + opts.port);
+    console.log('--------------------------------------------------');
   });
-});
-
-
-when.all([p1, p2]).then(function() {
-  console.log('Server listening at ' + 'localhost' + ':' + opts.port);
-  console.log('Dev server listening at ' +
-              config.userOptions.devServerAddr + ':' +
-              config.userOptions.devServerPort);
-  console.log('--------------------------------------------------');
-  console.log('');
-
-  // Should sleep forever.
-}).catch(function(err) {
-  console.log('Error starting');
-});
