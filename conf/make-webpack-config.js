@@ -173,13 +173,25 @@ function buildStyleConfig(config, opts) {
   var cssLoaders = [
     'style-loader',
 
-    // We apply autoprefixer-loader to files that are imported, in addition to
-    // our files.  We also minimize in production.
-    'css-loader?importLoaders=1' + (opts.production ? '&minimize' : ''),
+    // We apply postcss-loader to files that are imported, in addition to
+    // our files.
+    'css-loader?importLoaders=1',
 
-    // Autoprefixer settings
-    'autoprefixer-loader?browsers=last 3 versions'
+    // Autoprefixer and minimizer
+    'postcss-loader',
   ];
+
+  // Set postcss settings
+  config.postcss = [
+    require('autoprefixer-core')({
+      browsers: ['last 3 versions'],
+    }),
+  ];
+
+  if( opts.production ) {
+    // Only minimize CSS in production.
+    config.postcss.push(require('csswring'));
+  }
 
   var sassLoaders = cssLoaders.concat('sass-loader');
 
