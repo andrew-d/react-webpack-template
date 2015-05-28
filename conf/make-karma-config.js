@@ -107,9 +107,9 @@ module.exports = function(opts) {
       dir: path.join(__dirname, '..', 'coverage'),
 
       reporters: options.ci ? [
-        { type: 'text', subdir: '.', file: 'coverage.txt' },
+        { type: 'text' },
       ] : [
-        { type: 'text', subdir: '.', file: 'coverage.txt' },
+        { type: 'text' },
         { type: 'html', subdir: 'report-html' },
       ],
     };
