@@ -5,11 +5,13 @@
   ],
   "env": {
     "browser": true,
+    "mocha": true,
     "node": true
   },
   "globals": {
     "__DEV__": true,
-    "__SERVER__": true
+    "__SERVER__": true,
+    "expect": true
   },
   "rules": {
     // Strict mode
@@ -33,7 +35,7 @@
     "react/prop-types": 2,
     "react/wrap-multilines": 1
   },
-  ecmaFeatures: {
+  "ecmaFeatures": {
     "arrowFunctions": true,
     "blockBindings": true,
     "classes": true,
