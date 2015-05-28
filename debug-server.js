@@ -24,7 +24,7 @@ var opts = nomnom
         return "port must be an integer";
       }
 
-      if( port <= 0 || port > 65536 ) {
+      if( port <= 0 || port > 65535 ) {
         return "port must be in the range 1-65535";
       }
     },
@@ -32,6 +32,11 @@ var opts = nomnom
   .option('upstream', {
     default: null,
     help: "If specified, proxy all requests matching 'upstream-prefix' here",
+    callback: function(upstream) {
+      if( !/^https?\:\/\//i.test(upstream) ) {
+        return 'upstream must start with "http://" or "https://"';
+      }
+    },
   })
   .option('upstream-prefix', {
     default: '/api',
