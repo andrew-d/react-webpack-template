@@ -52,8 +52,6 @@ module.exports = function(opts) {
   var options = validateOptions(opts),
       testDir = path.join(__dirname, '..', 'test');
 
-  console.log('testDir = ' + testDir);
-
   var karmaConfig = {
     // TravisCI, etc. can run Firefox in xvfb
     browsers: [options.ci ? 'Firefox' : 'Chrome'],
