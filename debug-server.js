@@ -11,6 +11,7 @@ var opts = nomnom
   .option('host', {
     abbr: 'h',
     default: 'localhost',
+    help: 'Host to listen on',
   })
   .option('port', {
     abbr: 'p',
