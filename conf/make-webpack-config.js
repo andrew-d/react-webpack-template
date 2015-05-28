@@ -22,7 +22,7 @@ var VALID_OPTIONS = {
   'lint'         : Boolean,
   'devtool'      : String,
   'assetsPath'   : String,
-  'devServerHost': String,
+  'devServerAddr': String,
 };
 
 // ------------------------------------------------------------
@@ -67,8 +67,8 @@ var validateOptions = function(options) {
   if( out.assetsPath === undefined ) {
     out.assetsPath = 'assets';
   }
-  if( out.devServerHost === undefined ) {
-    out.devServerHost = 'localhost:3000';
+  if( out.devServerAddr === undefined ) {
+    out.devServerAddr = 'localhost:3000';
   }
 
   return out;
