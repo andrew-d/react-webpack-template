@@ -62,6 +62,7 @@ module.exports = function(opts) {
     frameworks: ['mocha'],
 
     files: [
+      '../node_modules/babel-core/browser-polyfill.js',
       testFilesJs,
       testFilesJsx,
     ],
@@ -92,7 +93,7 @@ module.exports = function(opts) {
 
   // Add coverage options.
   if( options.coverage ) {
-    // Setup webpac configuration.
+    // Setup webpack configuration.
     // Needs to load first to prevent linting issues
     webpackConfig.module.preLoaders = [
       {
