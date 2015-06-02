@@ -105,9 +105,17 @@ function buildJavascriptConfig(config, opts) {
   // 2. Make the appropriate loaders
   // --------------------------------------------------
   var jsLoaders = [babelLoader];
+
   if( opts.hotReload ) {
     // Must go before other loaders.
     jsLoaders.unshift('react-hot-loader');
+  }
+
+  if( !opts.production ) {
+    Array.prototype.push.apply(jsLoaders, [
+      'flowcheck-loader',
+      babelLoader + '&blacklist=flow',
+    ]);
   }
 
   Array.prototype.push.apply(config.module.loaders, [
