@@ -193,7 +193,13 @@ function buildStyleConfig(config, opts) {
     config.postcss.push(require('csswring'));
   }
 
-  var sassLoaders = cssLoaders.concat('sass-loader');
+  var sassOptions = [
+      'precision=10',
+      'includePaths[]=' + path.join(__dirname, '..', 'bower_components'),
+      'includePaths[]=' + path.resolve(__dirname, '..', 'node_modules'),
+  ];
+
+  var sassLoaders = cssLoaders.concat('sass-loader?' + sassOptions.join('&'));
 
   // Join the loaders together now.
   cssLoaders = cssLoaders.join('!');
