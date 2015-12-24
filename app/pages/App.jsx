@@ -23,6 +23,9 @@ export default class App extends React.Component {
             <IndexLinkContainer to='/'>
               <NavItem href='/'>Home</NavItem>
             </IndexLinkContainer>
+            <LinkContainer to='/ts'>
+              <NavItem href='/ts'>TypeScript</NavItem>
+            </LinkContainer>
             <LinkContainer to='/about'>
               <NavItem href='/about'>About</NavItem>
             </LinkContainer>

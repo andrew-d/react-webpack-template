@@ -101,6 +101,7 @@ function buildJavascriptConfig(config, opts) {
     { test: /\.js$/,   loaders: jsLoaders, exclude: /node_modules/ },
     { test: /\.jsx$/,  loaders: jsLoaders, exclude: /node_modules/ },
     { test: /\.json$/, loaders: ['json-loader'] },
+    { test: /\.tsx?$/, loaders: ['ts-loader'] },
   ]);
 
   // 2. Add plugins for Javascript
@@ -298,7 +299,7 @@ module.exports = function(opts) {
 
     resolve: {
       modulesDirectories: ['node_modules', 'app'],
-      extensions: ['', '.js', '.jsx', '.json'],
+      extensions: ['', '.js', '.jsx', '.ts', '.tsx', '.json'],
     },
 
     resolveLoader: {
