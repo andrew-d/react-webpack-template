@@ -6,9 +6,7 @@
  * some input options and then outputs the appropriate configuration.
  */
 
-var forOwn = require('lodash-node/modern/object/forOwn'),
-    isNaN = require('lodash-node/modern/lang/isNaN'),
-    path = require('path'),
+var path = require('path'),
     webpackConfig = require('./webpack.test.js');
 
 // ------------------------------------------------------------
@@ -26,7 +24,9 @@ var validateOptions = function(options) {
     ci:       false,        // Running in continuous integration?
   };
 
-  forOwn(options, function(value, key) {
+  Object.keys(options).forEach(function(key) {
+    var value = options[key];
+
     if( 'coverage' === key ) {
       out.coverage = !!value;
     } else if( 'notify' === key ) {
@@ -62,7 +62,7 @@ module.exports = function(opts) {
     frameworks: ['mocha'],
 
     files: [
-      '../node_modules/babel-core/browser-polyfill.js',
+      '../node_modules/babel-polyfill/dist/polyfill.min.js',
       testFilesJs,
       testFilesJsx,
     ],

@@ -1,15 +1,17 @@
-import Home from '../../app/pages/Home';
 import React from 'react';
-import TestUtils from 'react/lib/ReactTestUtils';
+import ReactDOM from 'react-dom';
+import TestUtils from 'react-addons-test-utils';
 import expect from 'expect';
-import stubRouterContext from '../utils/stubRouterContext';
+
+import Home from '../../app/pages/Home';
+
 
 
 describe('home', function () {
   it('renders without problems', function () {
-    const Subject = stubRouterContext(Home);
-    const home = TestUtils.renderIntoDocument(<Subject />);
+    const page = TestUtils.renderIntoDocument(<Home />);
+    const title = TestUtils.findRenderedDOMComponentWithTag(page, 'h1');
 
-    expect(home).toExist();
+    expect(ReactDOM.findDOMNode(title).textContent).toBe('React Webpack Starter');
   });
 });

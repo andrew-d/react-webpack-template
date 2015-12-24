@@ -7,9 +7,8 @@
  * the appropriate configuration.
  */
 
-var extend = require('lodash-node/modern/object/assign'),
-    forOwn = require('lodash-node/modern/object/forOwn'),
-    isNaN = require('lodash-node/modern/lang/isNaN'),
+var autoprefixer = require('autoprefixer'),
+    csswring = require('csswring'),
     path = require('path'),
     webpack = require('webpack'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
@@ -36,17 +35,17 @@ var VALID_OPTIONS = {
 var validateOptions = function(options) {
   var out = {};
 
-  forOwn(options, function(value, key) {
+  Object.keys(options).forEach(function(key) {
     // If this isn't an option, throw.
     if( !VALID_OPTIONS[key] ) {
       throw new Error("make-webpack-config: option '" + key + "' doesn't exist");
     }
 
     // Coerce
-    out[key] = VALID_OPTIONS[key](value);
+    out[key] = VALID_OPTIONS[key](options[key]);
 
     // Explicitly check for NaN.
-    if( isNaN(out[key]) ) {
+    if( Number.isNaN(out[key]) ) {
       throw new Error("make-webpack-config: option '" + key + "' evaluated to NaN");
     }
   });
@@ -83,28 +82,16 @@ var validateOptions = function(options) {
  * @param {Object} opts The validated input options
  */
 function buildJavascriptConfig(config, opts) {
-  // 1. Build the options for Babel
-  // --------------------------------------------------
-  var babelLoaderOptions = [
-    // static foo = 'bar' in classes
-    'optional[]=es7.classProperties',
-
-    // TODO: this breaks some things
-    // move JSX out of function bodies
-    //'optional[]=optimisation.react.constantElements',
-  ];
-
-  if( opts.production ) {
+  // TODO: figure out how to include this
+  if( false ) {
     babelLoaderOptions.push(
       'optional[]=optimisation.react.inlineElements'
     );
   }
 
-  var babelLoader = 'babel-loader?' + babelLoaderOptions.join('&');
-
-  // 2. Make the appropriate loaders
+  // 1. Make the appropriate loaders
   // --------------------------------------------------
-  var jsLoaders = [babelLoader];
+  var jsLoaders = ["babel-loader"];
   if( opts.hotReload ) {
     // Must go before other loaders.
     jsLoaders.unshift('react-hot-loader');
@@ -116,7 +103,7 @@ function buildJavascriptConfig(config, opts) {
     { test: /\.json$/, loaders: ['json-loader'] },
   ]);
 
-  // 3. Add plugins for Javascript
+  // 2. Add plugins for Javascript
   // --------------------------------------------------
   var extraPlugins = opts.production ? [
     new webpack.DefinePlugin({
@@ -125,7 +112,7 @@ function buildJavascriptConfig(config, opts) {
         NODE_DEBUG: JSON.stringify(""),
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin({ preferEntry: true }),
+    new webpack.optimize.OccurenceOrderPlugin(/* preferEntry = */ true),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false,
@@ -144,7 +131,7 @@ function buildJavascriptConfig(config, opts) {
 
   Array.prototype.push.apply(config.plugins, extraPlugins);
 
-  // 4. Add entry points for react-hot-loader
+  // 3. Add entry points for react-hot-loader
   // --------------------------------------------------
   if( opts.hotReload ) {
     Array.prototype.unshift.apply(config.entry, [
@@ -183,20 +170,16 @@ function buildStyleConfig(config, opts) {
 
   // Set postcss settings
   config.postcss = [
-    require('autoprefixer-core')({
-      browsers: ['last 3 versions'],
-    }),
+    autoprefixer({ browsers: ['last 3 versions', 'safari 5', 'ie 9', 'ios 6', 'android 4'] }),
   ];
-
   if( opts.production ) {
     // Only minimize CSS in production.
-    config.postcss.push(require('csswring'));
+    config.postcss.push(csswring);
   }
 
   var sassOptions = [
-      'precision=10',
-      'includePaths[]=' + path.join(__dirname, '..', 'bower_components'),
-      'includePaths[]=' + path.resolve(__dirname, '..', 'node_modules'),
+    'precision=10',
+    'includePaths[]=' + path.resolve(__dirname, '..', 'node_modules'),
   ];
 
   var sassLoaders = cssLoaders.concat('sass-loader?' + sassOptions.join('&'));
@@ -240,7 +223,7 @@ function buildStaticConfig(config, opts) {
   // 1. Build the options.
   // --------------------------------------------------
   var fileLoaderOptions = { name: path.join(opts.assetsPath, '[hash].[ext]') },
-      urlLoaderOptions = extend({}, fileLoaderOptions, {
+      urlLoaderOptions = Object.assign({}, fileLoaderOptions, {
         limit: 10000,
       });
 
@@ -251,39 +234,39 @@ function buildStaticConfig(config, opts) {
     {
       test: /\.(woff|woff2)(\?.*)?$/,
       loader: "url-loader",
-      query: extend({}, urlLoaderOptions, { mimetype: 'application/font-woff' }),
+      query: Object.assign({}, urlLoaderOptions, { mimetype: 'application/font-woff' }),
     },
     {
       test: /\.ttf(\?.*)?$/,
       loader: "file-loader",
-      query: extend({}, fileLoaderOptions, { mimetype: 'application/vnd.ms-fontobject' }),
+      query: Object.assign({}, fileLoaderOptions, { mimetype: 'application/vnd.ms-fontobject' }),
     },
     {
       test: /\.eot(\?.*)?$/,
       loader: "file-loader",
-      query: extend({}, fileLoaderOptions, { mimetype: 'application/x-font-ttf' }),
+      query: Object.assign({}, fileLoaderOptions, { mimetype: 'application/x-font-ttf' }),
     },
     {
       test: /\.svg(\?.*)?$/,
       loader: "file-loader",
-      query: extend({}, fileLoaderOptions, { mimetype: 'image/svg+xml' }),
+      query: Object.assign({}, fileLoaderOptions, { mimetype: 'image/svg+xml' }),
     },
 
     // Inline base64 URLs for small images, direct URLs for the rest
     {
       test: /\.png$/,
       loader: "url-loader",
-      query: extend({}, urlLoaderOptions, { mimetype: 'image/png' }),
+      query: Object.assign({}, urlLoaderOptions, { mimetype: 'image/png' }),
     },
     {
       test: /\.gif$/,
       loader: "url-loader",
-      query: extend({}, urlLoaderOptions, { mimetype: 'image/gif' }),
+      query: Object.assign({}, urlLoaderOptions, { mimetype: 'image/gif' }),
     },
     {
       test: /\.(jpg|jpeg)$/,
       loader: "url-loader",
-      query: extend({}, urlLoaderOptions, { mimetype: 'image/jpg' }),
+      query: Object.assign({}, urlLoaderOptions, { mimetype: 'image/jpg' }),
     },
   ]);
 }
@@ -314,7 +297,7 @@ module.exports = function(opts) {
     },
 
     resolve: {
-      modulesDirectories: ['bower_components', 'node_modules'],
+      modulesDirectories: ['node_modules', 'app'],
       extensions: ['', '.js', '.jsx', '.json'],
     },
 
@@ -341,6 +324,12 @@ module.exports = function(opts) {
 
       // Prevent any assets from being emitted if there's an error.
       new webpack.NoErrorsPlugin(),
+
+      // Allow using jquery without explicitly requiring it.
+      new webpack.ProvidePlugin({
+        jQuery: 'jquery',
+        $: 'jquery',
+      }),
     ],
   };
 
