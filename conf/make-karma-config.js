@@ -27,11 +27,11 @@ var validateOptions = function(options) {
   Object.keys(options).forEach(function(key) {
     var value = options[key];
 
-    if( 'coverage' === key ) {
+    if ('coverage' === key) {
       out.coverage = !!value;
-    } else if( 'notify' === key ) {
+    } else if ('notify' === key) {
       out.notify = !!value;
-    } else if( 'ci' === key ) {
+    } else if ('ci' === key) {
       out.ci = !!value;
     } else {
       throw new Error("make-karma-config: option '" + key + "' doesn't exist");
@@ -92,7 +92,7 @@ module.exports = function(opts) {
   karmaConfig.plugins.push(options.ci ? 'karma-firefox-launcher' : 'karma-chrome-launcher');
 
   // Add coverage options.
-  if( options.coverage ) {
+  if (options.coverage) {
     // Setup webpack configuration.
     // Needs to load first to prevent linting issues
     webpackConfig.module.preLoaders = [
@@ -121,7 +121,7 @@ module.exports = function(opts) {
   }
 
   // Add notify options.
-  if( options.notify ) {
+  if (options.notify) {
     karmaConfig.plugins.push('karma-notify-reporter');
     karmaConfig.reporters.push('notify');
   }

@@ -26,11 +26,11 @@ var opts = nomnom
     callback: function(port) {
       var parsed = parseInt(port);
 
-      if( port != parsed ) {
+      if (port != parsed) {
         return "port must be an integer";
       }
 
-      if( port <= 0 || port > 65535 ) {
+      if (port <= 0 || port > 65535) {
         return "port must be in the range 1-65535";
       }
     },
@@ -39,7 +39,7 @@ var opts = nomnom
     default: null,
     help: "If specified, proxy all requests matching 'upstream-prefix' here",
     callback: function(upstream) {
-      if( !/^https?\:\/\//i.test(upstream) ) {
+      if (!/^https?\:\/\//i.test(upstream)) {
         return 'upstream must start with "http://" or "https://"';
       }
     },
@@ -81,7 +81,7 @@ var devServerConfig = {
 
 // Configure proxy
 var prefixPath;
-if( opts.upstream ) {
+if (opts.upstream) {
   var logger = morgan('dev');
 
   // Parse our upstream prefix using the URL module and ensure it ends with
@@ -89,9 +89,9 @@ if( opts.upstream ) {
   var prefixUrl = url.parse(opts['upstream-prefix']);
 
   prefixPath = prefixUrl.pathname;
-  if( endsWith(prefixPath, '/*') ) {
+  if (endsWith(prefixPath, '/*')) {
     // Do nothing
-  } else if( endsWith(prefixPath, '/') ) {
+  } else if (endsWith(prefixPath, '/')) {
     prefixPath += '*';
   } else {
     prefixPath += '/*';
@@ -105,7 +105,7 @@ if( opts.upstream ) {
     configure: function(proxy) {
       // The configure function is called on every request, so don't add a
       // listener each time.
-      if( proxy.__has_logger ) return;
+      if (proxy.__has_logger) return;
 
       proxy.on('proxyReq', function(proxyReq, req, res, options) {
         logger(req, res, function() {});
@@ -122,12 +122,12 @@ if( opts.upstream ) {
 new WebpackDevServer(webpack(webpackConfig), devServerConfig).listen(
   opts.port, opts.host,
   function(err, result) {
-    if( err ) {
+    if (err) {
       console.log(err);
     }
 
-    console.log('Listening at ' + opts.host + ':' + opts.port);
-    if( opts.upstream ) {
+    console.log('Listening at http://' + opts.host + ':' + opts.port);
+    if (opts.upstream) {
       console.log('Proxying requests that match "' + prefixPath + '" to: ' + opts.upstream);
     }
 

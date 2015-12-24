@@ -37,7 +37,7 @@ var validateOptions = function(options) {
 
   Object.keys(options).forEach(function(key) {
     // If this isn't an option, throw.
-    if( !VALID_OPTIONS[key] ) {
+    if (!VALID_OPTIONS[key]) {
       throw new Error("make-webpack-config: option '" + key + "' doesn't exist");
     }
 
@@ -45,28 +45,28 @@ var validateOptions = function(options) {
     out[key] = VALID_OPTIONS[key](options[key]);
 
     // Explicitly check for NaN.
-    if( Number.isNaN(out[key]) ) {
+    if (Number.isNaN(out[key])) {
       throw new Error("make-webpack-config: option '" + key + "' evaluated to NaN");
     }
   });
 
   // Set default options.
-  if( out.production === undefined ) {
+  if (out.production === undefined) {
     out.production = false;
   }
-  if( out.hotReload === undefined ) {
+  if (out.hotReload === undefined) {
     out.hotReload = !out.production;
   }
-  if( out.lint === undefined ) {
+  if (out.lint === undefined) {
     out.lint = true;
   }
-  if( out.devtool === undefined ) {
+  if (out.devtool === undefined) {
     out.devtool = out.production ? null : 'source-map';
   }
-  if( out.assetsPath === undefined ) {
+  if (out.assetsPath === undefined) {
     out.assetsPath = 'assets';
   }
-  if( out.devServerAddr === undefined ) {
+  if (out.devServerAddr === undefined) {
     out.devServerAddr = 'localhost:3000';
   }
 
@@ -83,7 +83,7 @@ var validateOptions = function(options) {
  */
 function buildJavascriptConfig(config, opts) {
   // TODO: figure out how to include this
-  if( false ) {
+  if (false) {
     babelLoaderOptions.push(
       'optional[]=optimisation.react.inlineElements'
     );
@@ -92,7 +92,7 @@ function buildJavascriptConfig(config, opts) {
   // 1. Make the appropriate loaders
   // --------------------------------------------------
   var jsLoaders = ["babel-loader"];
-  if( opts.hotReload ) {
+  if (opts.hotReload) {
     // Must go before other loaders.
     jsLoaders.unshift('react-hot-loader');
   }
@@ -133,7 +133,7 @@ function buildJavascriptConfig(config, opts) {
 
   // 3. Add entry points for react-hot-loader
   // --------------------------------------------------
-  if( opts.hotReload ) {
+  if (opts.hotReload) {
     Array.prototype.unshift.apply(config.entry, [
       'webpack-dev-server/client?http://' + opts.devServerAddr,
       'webpack/hot/only-dev-server'
@@ -172,7 +172,7 @@ function buildStyleConfig(config, opts) {
   config.postcss = [
     autoprefixer({ browsers: ['last 3 versions', 'safari 5', 'ie 9', 'ios 6', 'android 4'] }),
   ];
-  if( opts.production ) {
+  if (opts.production) {
     // Only minimize CSS in production.
     config.postcss.push(csswring);
   }
@@ -191,7 +191,7 @@ function buildStyleConfig(config, opts) {
   // In production, we want to run these loaders through the ExtractTextPlugin.
   // This involves stripping off the 'style' loader and calling the .extract()
   // function.
-  if( opts.production ) {
+  if (opts.production) {
     cssLoaders = extractInProduction(cssLoaders);
     sassLoaders = extractInProduction(sassLoaders);
   }
