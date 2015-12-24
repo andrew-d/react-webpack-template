@@ -11,8 +11,11 @@ import { Router } from 'react-router';
 // Import vendor styles here.
 import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
 
-import routes from './Routes';
+// Static files
+import 'copy!favicon.ico';
+import 'copy!robots.txt';
 
+import routes from './Routes';
 ReactDOM.render(
   <Router>
     {routes}

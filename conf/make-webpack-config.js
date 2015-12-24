@@ -301,6 +301,14 @@ module.exports = function(opts) {
       extensions: ['', '.js', '.jsx', '.json'],
     },
 
+    resolveLoader: {
+      alias: {
+        // This is an alias that allows us to copy files from our app directory
+        // to the output directory as-is; this is useful for static files.
+        'copy': 'file-loader?name=[path][name].[ext]&context=' + path.join(__dirname, '..', 'app'),
+      },
+    },
+
     module: {
       // Lint only when specified
       preLoaders: options.lint ? [
