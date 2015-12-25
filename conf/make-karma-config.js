@@ -6,7 +6,8 @@
  * some input options and then outputs the appropriate configuration.
  */
 
-var path = require('path'),
+var glob = require('glob'),
+    path = require('path'),
     webpackConfig = require('./webpack.test.js');
 
 // ------------------------------------------------------------
@@ -52,8 +53,15 @@ module.exports = function(opts) {
   var options = validateOptions(opts),
       testDir = path.join(__dirname, '..', 'test');
 
-  var testFilesJs = path.join(testDir, '**', '*.test.js'),
-      testFilesJsx = path.join(testDir, '**', '*.test.jsx');
+  var testFiles = [];
+  ['js', 'jsx', 'ts', 'tsx'].forEach(function(extension) {
+    var searchPath = path.join(testDir, '**', '*.test.' + extension);
+    var newFiles = glob.sync(searchPath);
+
+    if (newFiles) {
+      testFiles = testFiles.concat(newFiles);
+    }
+  });
 
   var karmaConfig = {
     // TravisCI, etc. can run Firefox in xvfb
@@ -63,9 +71,7 @@ module.exports = function(opts) {
 
     files: [
       '../node_modules/babel-polyfill/dist/polyfill.min.js',
-      testFilesJs,
-      testFilesJsx,
-    ],
+    ].concat(testFiles),
     preprocessors: {},
 
     webpackMiddleware: {
@@ -85,8 +91,9 @@ module.exports = function(opts) {
   };
 
   // Set preprocessors.
-  karmaConfig.preprocessors[testFilesJs] = ['webpack'];
-  karmaConfig.preprocessors[testFilesJsx] = ['webpack'];
+  testFiles.forEach(function(file) {
+    karmaConfig.preprocessors[file] = ['webpack'];
+  });
 
   // Add appropriate browser loaders
   karmaConfig.plugins.push(options.ci ? 'karma-firefox-launcher' : 'karma-chrome-launcher');
@@ -99,7 +106,7 @@ module.exports = function(opts) {
       {
         test: /\.jsx?$/,
         exclude: /(\/test\/|node_modules)/,
-        loader: 'isparta-loader?{babel: {optional:["es7.classProperties"]}}',
+        loader: 'isparta-loader',
       },
     ].concat(webpackConfig.module.preLoaders);
 
