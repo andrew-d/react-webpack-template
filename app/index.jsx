@@ -6,7 +6,7 @@ import 'babel-polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 
 // Import vendor styles here.
 import 'bootstrap-sass/assets/stylesheets/_bootstrap.scss';
@@ -17,7 +17,7 @@ import 'copy!robots.txt';
 
 import routes from './Routes';
 ReactDOM.render(
-  <Router>
+  <Router history={browserHistory}>
     {routes}
   </Router>,
   document.getElementById('app')
